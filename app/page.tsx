@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
+import LogoTicker from "@/components/logo-ticker";
 
 // Animation variants
 const fadeIn = {
@@ -420,109 +421,7 @@ export default function HomePage() {
             },
           }}
         >
-          <div className="container max-w-4xl mx-auto px-4">
-            <div className="text-center mb-10">
-              <h3 className="text-gray-500 font-medium uppercase tracking-wider text-sm">
-                Trusted by companies worldwide
-              </h3>
-            </div>
-
-            <div className="relative w-full max-w-4xl mx-auto overflow-hidden py-8">
-              {/* Gradient fades on edges for smooth transition effect */}
-              <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
-              <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
-
-              {/* Auto-scrolling logos in grayscale with improved spacing */}
-              <div className="flex animate-marquee whitespace-nowrap">
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
-                    alt="Google"
-                    className="h-5 md:h-7 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
-                    alt="Meta"
-                    className="h-5 md:h-6 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg"
-                    alt="Airbnb"
-                    className="h-5 md:h-8 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.svg"
-                    alt="Uber"
-                    className="h-4 md:h-6 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
-                    alt="AWS"
-                    className="h-5 md:h-6 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
-                    alt="Microsoft"
-                    className="h-5 md:h-7 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
-                    alt="Spotify"
-                    className="h-5 md:h-7 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Slack_Technologies_Logo.svg"
-                    alt="Slack"
-                    className="h-5 md:h-7 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-
-                {/* Duplicate logos for seamless looping */}
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
-                    alt="Google"
-                    className="h-5 md:h-7 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
-                    alt="Meta"
-                    className="h-5 md:h-6 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg"
-                    alt="Airbnb"
-                    className="h-5 md:h-8 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-                <div className="mx-12 flex items-center justify-center">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.svg"
-                    alt="Uber"
-                    className="h-4 md:h-6 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <LogoTicker />
         </motion.div>
 
         {/* Stats Section */}
