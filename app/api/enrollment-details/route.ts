@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { adminDb } from "@/lib/firebase-admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-02-24.acacia", // Updated to match required version
+  apiVersion: "2025-02-24.acacia",
 });
 
 export async function GET(request: Request) {
@@ -16,13 +15,14 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Get enrollment details from Firestore
-    const enrollmentRef = doc(db, "enrollments", sessionId);
-    const enrollmentDoc = await getDoc(enrollmentRef);
+    // Get enrollment details from Firestore using admin SDK
+    const enrollmentDoc = await adminDb
+      .collection("enrollments")
+      .doc(sessionId)
+      .get();
 
-    if (!enrollmentDoc.exists()) {
+    if (!enrollmentDoc.exists) {
       // If not found in Firebase yet, try to get from Stripe directly
-      // (might happen if webhook hasn't processed yet)
       const session = await stripe.checkout.sessions.retrieve(sessionId);
 
       if (!session?.metadata?.courseId) {
@@ -33,10 +33,12 @@ export async function GET(request: Request) {
       }
 
       // Get course details
-      const courseRef = doc(db, "courses", session.metadata.courseId);
-      const courseDoc = await getDoc(courseRef);
+      const courseDoc = await adminDb
+        .collection("courses")
+        .doc(session.metadata.courseId)
+        .get();
 
-      if (!courseDoc.exists()) {
+      if (!courseDoc.exists) {
         return NextResponse.json(
           { error: "Course not found" },
           { status: 404 }
@@ -46,8 +48,8 @@ export async function GET(request: Request) {
       const courseData = courseDoc.data();
 
       return NextResponse.json({
-        courseName: courseData.title,
-        startDate: courseData.startDate,
+        courseName: courseData?.title,
+        startDate: courseData?.startDate,
         amount: session.amount_total ? session.amount_total / 100 : 0,
         status: "processing",
       });
@@ -57,20 +59,22 @@ export async function GET(request: Request) {
     const enrollmentData = enrollmentDoc.data();
 
     // Get course details
-    const courseRef = doc(db, "courses", enrollmentData.courseId);
-    const courseDoc = await getDoc(courseRef);
+    const courseDoc = await adminDb
+      .collection("courses")
+      .doc(enrollmentData?.courseId)
+      .get();
 
-    if (!courseDoc.exists()) {
+    if (!courseDoc.exists) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
     const courseData = courseDoc.data();
 
     return NextResponse.json({
-      courseName: enrollmentData.courseName,
-      startDate: courseData.startDate,
-      amount: enrollmentData.paymentAmount,
-      status: enrollmentData.status,
+      courseName: enrollmentData?.courseName,
+      startDate: courseData?.startDate,
+      amount: enrollmentData?.paymentAmount,
+      status: enrollmentData?.status,
     });
   } catch (error) {
     console.error("Error retrieving enrollment details:", error);
