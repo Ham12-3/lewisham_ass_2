@@ -35,6 +35,7 @@ import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 import LogoTicker from "@/components/logo-ticker";
 import SolutionsBentoGrid from "@/components/solutions-bento-grid";
 import HowItWorksCarousel from "@/components/how-it-works-carousel";
+import TestimonialsMarquee from "@/components/testimonials-marquee";
 
 // Animation variants
 const fadeIn = {
@@ -520,8 +521,14 @@ export default function HomePage() {
         </section>
 
         {/* Solutions Section with Bento Grid */}
-        <section className="bg-gray-50 py-20">
-          <div className="container max-w-6xl mx-auto px-4 md:px-6">
+        <section className="bg-white py-20 relative overflow-hidden">
+          {/* Add the abstract background shapes */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-20 right-10 w-64 h-64 rounded-full bg-blue-700 mix-blend-multiply blur-xl"></div>
+            <div className="absolute bottom-20 left-10 w-56 h-56 rounded-full bg-indigo-700 mix-blend-multiply blur-xl"></div>
+          </div>
+
+          <div className="container max-w-6xl mx-auto px-4 md:px-6 relative z-10">
             <motion.div
               className="text-center mb-14"
               initial="hidden"
@@ -561,154 +568,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured Courses */}
-        <section className="py-16 bg-gray-50">
-          <div className="container max-w-6xl mx-auto px-4 md:px-6">
-            {" "}
-            {/* Added max-width */}
-            <motion.div
-              className="text-center mb-16"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeIn}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                Featured Programs
-              </h2>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Discover our most popular bootcamp programs designed to meet
-                industry demand and launch your career.
-              </p>
-            </motion.div>
-            {/* Course cards remain the same */}
+        {/* Testimonials Marquee Section */}
+        <section className="py-20 bg-white relative overflow-hidden">
+          {/* Add the abstract background shapes */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-40 left-20 w-72 h-72 rounded-full bg-purple-700 mix-blend-multiply blur-xl"></div>
+            <div className="absolute bottom-10 right-20 w-64 h-64 rounded-full bg-blue-700 mix-blend-multiply blur-xl"></div>
           </div>
-        </section>
 
-        {/* Features Section with Animation */}
-        <section className="w-full py-16 bg-white">
-          <div className="container max-w-6xl mx-auto px-4 md:px-6">
-            {" "}
-            {/* Added max-width */}
-            <motion.div
-              className="text-center mb-12"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeIn}
-            >
-              <h2 className="text-3xl font-bold mb-4">
-                Why Choose Our Bootcamp?
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Our curriculum and teaching approach set us apart from
-                traditional education.
-              </p>
-            </motion.div>
-            <motion.div
-              className="grid gap-8 lg:grid-cols-3 items-start max-w-5xl mx-auto"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-            >
-              <motion.div
-                variants={fadeIn}
-                className="group p-8 bg-gradient-to-b from-white to-gray-50 rounded-2xl shadow-md hover:shadow-xl transition-all"
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-3">
-                  Industry-Led Curriculum
-                </h3>
-                <p className="text-gray-600">
-                  Our curriculum is developed with input from industry leaders
-                  and updated regularly to ensure you learn the most relevant,
-                  in-demand skills for today's job market.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={fadeIn}
-                className="group p-8 bg-gradient-to-b from-white to-gray-50 rounded-2xl shadow-md hover:shadow-xl transition-all"
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-3">Expert Instructors</h3>
-                <p className="text-gray-600">
-                  Learn directly from industry professionals with years of
-                  real-world experience who bring practical insights and
-                  mentorship beyond what you'd find in traditional education.
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={fadeIn}
-                className="group p-8 bg-gradient-to-b from-white to-gray-50 rounded-2xl shadow-md hover:shadow-xl transition-all"
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 mb-6">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-3">Career Support</h3>
-                <p className="text-gray-600">
-                  Comprehensive career services including resume reviews, mock
-                  interviews, portfolio development, and direct connections to
-                  our network of hiring partners.
-                </p>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section className="py-16 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
-          <div className="container max-w-6xl mx-auto px-4 md:px-6">
-            {" "}
-            {/* Added max-width */}
+          <div className="container max-w-6xl mx-auto px-4 md:px-6 relative z-10">
             <motion.div
               className="text-center mb-12"
               initial="hidden"
@@ -716,82 +584,26 @@ export default function HomePage() {
               viewport={{ once: true }}
               variants={fadeIn}
             >
-              <h2 className="text-3xl font-bold mb-4">Success Stories</h2>
-              <p className="text-gray-300 max-w-2xl mx-auto">
-                {" "}
-                {/* Added mx-auto */}
-                Hear from our graduates who transformed their careers through
-                our bootcamps.
+              <h2 className="text-4xl font-bold mb-4">What Our Students Say</h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Join thousands of satisfied students who have transformed their
+                careers through our programs
               </p>
             </motion.div>
-            <div className="relative max-w-4xl mx-auto px-8">
-              {" "}
-              {/* Already centered, but confirmed */}
-              <button
-                onClick={prevTestimonial}
-                className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full z-10"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeftIcon className="h-6 w-6" />
-              </button>
-              <button
-                onClick={nextTestimonial}
-                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full z-10"
-                aria-label="Next testimonial"
-              >
-                <ChevronRightIcon className="h-6 w-6" />
-              </button>
-              <div className="overflow-hidden">
-                <motion.div
-                  className="flex"
-                  initial={false}
-                  animate={{ x: `-${currentTestimonial * 100}%` }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                >
-                  {testimonials.map((testimonial) => (
-                    <div key={testimonial.id} className="min-w-full px-4">
-                      <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
-                        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-6">
-                          <div className="relative w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-blue-400 bg-blue-600 flex items-center justify-center">
-                            <UserCircle className="h-16 w-16 text-white" />
-                          </div>
-                          <div>
-                            <div className="text-center md:text-left">
-                              <p className="text-xl font-semibold">
-                                {testimonial.name}
-                              </p>
-                              <p className="text-blue-300">
-                                {testimonial.role}
-                              </p>
-                            </div>
-                            <div className="mt-4 flex justify-center md:justify-start">
-                              {[...Array(5)].map((_, i) => (
-                                <svg
-                                  key={i}
-                                  className="w-5 h-5 text-yellow-500 fill-current"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                </svg>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-gray-100 italic">
-                          &ldquo;{testimonial.quote}&rdquo;
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
+
+            <TestimonialsMarquee />
           </div>
         </section>
 
         {/* FAQ Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container max-w-6xl mx-auto px-4 md:px-6">
+        <section className="py-16 bg-white relative overflow-hidden">
+          {/* Add the abstract background shapes */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 right-30 w-56 h-56 rounded-full bg-indigo-700 mix-blend-multiply blur-xl"></div>
+            <div className="absolute bottom-40 left-30 w-72 h-72 rounded-full bg-blue-700 mix-blend-multiply blur-xl"></div>
+          </div>
+
+          <div className="container max-w-6xl mx-auto px-4 md:px-6 relative z-10">
             {" "}
             {/* Added max-width */}
             <motion.div
@@ -801,10 +613,10 @@ export default function HomePage() {
               viewport={{ once: true }}
               variants={fadeIn}
             >
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="text-4xl font-bold mb-4">
                 Frequently Asked Questions
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
                 Find answers to common questions about our bootcamps.
               </p>
             </motion.div>
@@ -814,10 +626,10 @@ export default function HomePage() {
               <Accordion type="single" collapsible className="w-full">
                 {faqs.map((faq, index) => (
                   <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger className="text-left font-medium">
+                    <AccordionTrigger className="text-left font-medium text-lg py-5">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-gray-600">
+                    <AccordionContent className="text-gray-600 text-base leading-relaxed">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -826,75 +638,39 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-r from-blue-900 to-indigo-900">
-          <div className="container max-w-6xl mx-auto px-4 md:px-6">
-            {" "}
-            {/* Added max-width */}
-            <div className="max-w-3xl mx-auto text-center text-white">
-              {" "}
-              {/* Already centered, but confirmed */}
-              <motion.h2
-                className="text-3xl md:text-4xl font-bold mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                Ready to Transform Your Career?
-              </motion.h2>
-              <motion.p
-                className="text-lg text-blue-100 mb-8"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                Join thousands of successful graduates who changed their lives
-                through our bootcamps.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <Link href="/courses">
-                  <Button
-                    size="lg"
-                    className="bg-white text-blue-900 hover:bg-blue-100 px-8 font-semibold border-2 border-transparent hover:border-white text-lg shadow-lg"
-                  >
-                    Apply Now
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="container max-w-6xl mx-auto px-4 md:px-6">
+      {/* Footer with Background Style Similar to Hero */}
+      <footer className="relative bg-white text-gray-900 py-20 overflow-hidden">
+        {/* Abstract shapes in background with adjusted colors for white bg - similar to hero */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-indigo-700 mix-blend-multiply blur-xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-blue-700 mix-blend-multiply blur-xl"></div>
+          <div className="absolute top-40 right-40 w-40 h-40 rounded-full bg-purple-700 mix-blend-multiply blur-xl"></div>
+        </div>
+
+        <div className="container max-w-6xl mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-5xl mx-auto">
             <div className="space-y-4">
               <Link href="/" className="flex items-center space-x-2">
-                <School className="h-8 w-8 text-blue-400" />
-                <span className="text-xl font-bold">Lewisham Tech</span>
+                <School className="h-10 w-10 text-blue-600" />
+                <span className="text-2xl font-bold text-blue-600">
+                  Lewisham Tech
+                </span>
               </Link>
-              <p className="text-gray-400">
+              <p className="text-gray-600 text-base">
                 Transforming careers through immersive technology education.
               </p>
               <div className="flex space-x-4">
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-gray-500 hover:text-blue-600 transition p-2 bg-gray-100 rounded-full"
+                  aria-label="Twitter"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -903,12 +679,13 @@ export default function HomePage() {
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-gray-500 hover:text-blue-600 transition p-2 bg-gray-100 rounded-full"
+                  aria-label="Instagram"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -917,12 +694,13 @@ export default function HomePage() {
                 </a>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-white transition"
+                  className="text-gray-500 hover:text-blue-600 transition p-2 bg-gray-100 rounded-full"
+                  aria-label="LinkedIn"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -933,12 +711,12 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold mb-4">Programs</h3>
-              <ul className="space-y-2">
+              <h3 className="text-xl font-bold mb-6">Programs</h3>
+              <ul className="space-y-3">
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     Web Development
                   </Link>
@@ -946,7 +724,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     Data Science
                   </Link>
@@ -954,7 +732,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     UX/UI Design
                   </Link>
@@ -962,7 +740,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     Cybersecurity
                   </Link>
@@ -971,12 +749,12 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold mb-4">Company</h3>
-              <ul className="space-y-2">
+              <h3 className="text-xl font-bold mb-6">Company</h3>
+              <ul className="space-y-3">
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     About Us
                   </Link>
@@ -984,7 +762,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     Careers
                   </Link>
@@ -992,7 +770,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     Blog
                   </Link>
@@ -1000,7 +778,7 @@ export default function HomePage() {
                 <li>
                   <Link
                     href="#"
-                    className="text-gray-400 hover:text-white transition"
+                    className="text-gray-600 hover:text-blue-600 transition font-medium"
                   >
                     Contact
                   </Link>
@@ -1009,74 +787,104 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold mb-4">Contact Us</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li className="flex items-start space-x-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  <span>123 Tech Road, Lewisham, London</span>
+              <h3 className="text-xl font-bold mb-6">Contact Us</h3>
+              <ul className="space-y-4 text-gray-600">
+                <li className="flex items-start space-x-3">
+                  <div className="bg-blue-100 p-2 rounded-full mt-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-blue-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-base">
+                    123 Tech Road, Lewisham, London
+                  </span>
                 </li>
-                <li className="flex items-start space-x-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span>info@lewishamtech.com</span>
+                <li className="flex items-start space-x-3">
+                  <div className="bg-blue-100 p-2 rounded-full mt-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-blue-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-base">info@lewishamtech.com</span>
                 </li>
-                <li className="flex items-start space-x-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  <span>+44 20 1234 5678</span>
+                <li className="flex items-start space-x-3">
+                  <div className="bg-blue-100 p-2 rounded-full mt-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-blue-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-base">+44 20 1234 5678</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-sm">
-            <p>
-              © {new Date().getFullYear()} Lewisham Tech Bootcamp. All rights
-              reserved.
-            </p>
+          <div className="border-t border-gray-200 mt-16 pt-8 text-center">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-gray-600">
+                © {new Date().getFullYear()} Lewisham Tech Bootcamp. All rights
+                reserved.
+              </p>
+              <div className="flex space-x-6 mt-4 md:mt-0">
+                <Link
+                  href="#"
+                  className="text-sm text-gray-500 hover:text-blue-600"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="#"
+                  className="text-sm text-gray-500 hover:text-blue-600"
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  href="#"
+                  className="text-sm text-gray-500 hover:text-blue-600"
+                >
+                  Cookie Policy
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
