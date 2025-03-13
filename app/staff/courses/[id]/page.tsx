@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CalendarIcon, ClockIcon, UsersIcon, BookOpenIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner"; // If you're using Sonner for toasts
+import { useAuth } from "@/lib/auth-context";
 
 type Course = {
   id: string;
@@ -25,11 +28,24 @@ type Course = {
   enrollments: number;
 };
 
-export default function CourseDetailPage() {
+export default function StaffCourseDetailPage() {
   const params = useParams();
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth(); // Use your auth context
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Check authentication and authorization
+  useEffect(() => {
+    // If auth is loaded and user is not authenticated or not staff
+    if (!authLoading && (!user || !user.staff)) {
+      toast.error("Access denied", {
+        description: "You don't have permission to access this page.",
+      });
+      router.push("/login"); // Redirect to login page
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -54,10 +70,27 @@ export default function CourseDetailPage() {
       }
     };
 
-    if (params.id) {
+    // Only fetch course if user is authenticated and has staff permissions
+    if (params.id && user && user.staff) {
       fetchCourse();
     }
-  }, [params.id]);
+  }, [params.id, user]);
+
+  // Show loading state if auth is still being determined
+  if (authLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // If not authenticated or not staff, don't render anything (will redirect)
+  if (!user || !user.staff) {
+    return null;
+  }
 
   if (loading) {
     return (

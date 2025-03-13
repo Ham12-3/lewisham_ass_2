@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { auth, db } from "@/lib/firebase";
+import { toast } from "sonner";
 
 export default function StaffLogin() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,8 @@ export default function StaffLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/staff/dashboard";
 
   const submitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,21 +42,44 @@ export default function StaffLogin() {
       );
       const user = userCredential.user;
 
-      // Create or update the user document with staff role
+      // Check if the user has staff role in Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+
+      if (
+        !userData ||
+        !(userData.role === "staff" || userData.role === "admin")
+      ) {
+        // Not a staff user
+        setError(
+          "You don't have staff permissions. Please contact your administrator."
+        );
+        // Sign out the user since they don't have staff permissions
+        await auth.signOut();
+        setLoading(false);
+        return;
+      }
+
+      // Update the lastLogin timestamp
       await setDoc(
         doc(db, "users", user.uid),
         {
-          email: user.email,
-          role: "staff", // Set the user's role to staff
           lastLogin: new Date(),
         },
         { merge: true }
-      ); // This will update existing documents or create new ones
+      );
 
-      router.push("/staff/dashboard");
-    } catch (error) {
+      toast.success("Login successful", {
+        description: "Welcome to the staff portal.",
+      });
+
+      // Redirect to the requested page or dashboard
+      router.push(decodeURIComponent(redirectTo));
+    } catch (error: any) {
       console.error("Login error:", error);
-      setError("Failed to login. Please check your credentials.");
+      setError(
+        error.message || "Failed to login. Please check your credentials."
+      );
     } finally {
       setLoading(false);
     }
@@ -96,13 +122,11 @@ export default function StaffLogin() {
                 required
               />
             </div>
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? "Signing in..." : "Sign In"}
+            </Button>
           </form>
         </CardContent>
-        <CardFooter>
-          <Button onClick={submitLogin} disabled={loading} className="w-full">
-            {loading ? "Signing in..." : "Sign In"}
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );
