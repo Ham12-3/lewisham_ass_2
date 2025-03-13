@@ -22,6 +22,13 @@ import {
   Database,
   Layers,
   ArrowRightIcon,
+  GraduationCap, // Added for education icon
+  Ban, // Replace Barrier with Ban
+  // OR
+  ShieldAlert, // OR use ShieldAlert instead
+  // OR
+  AlertOctagon, // OR use AlertOctagon instead
+  Cpu, // Added for technology change icon
 } from "lucide-react";
 import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
@@ -424,34 +431,88 @@ export default function HomePage() {
           <LogoTicker />
         </motion.div>
 
-        {/* Stats Section */}
-        <section className="bg-white py-12 border-b">
+        {/* Replace the Problem Statement Cards section with this updated version */}
+        <section className="bg-white py-16">
           <div className="container max-w-6xl mx-auto px-4 md:px-6">
-            {" "}
-            {/* Added max-width */}
             <motion.div
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
+              className="text-center mb-12"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+            >
+              <h2 className="text-4xl font-bold mb-4">Challenges We Solve</h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                We understand the barriers to entering the tech industry and
+                have designed our programs to address them.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 gap-12"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
             >
-              <motion.div variants={fadeIn} className="space-y-2">
-                <h3 className="text-4xl font-bold text-blue-600">96%</h3>
-                <p className="text-gray-600">Employment Rate</p>
+              <motion.div variants={fadeIn} className="text-center px-4">
+                <div className="flex justify-center mb-6 text-red-500">
+                  <GraduationCap size={48} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">
+                  Traditional Education Gap
+                </h3>
+                <p className="text-gray-600 text-lg">
+                  University degrees often lag behind industry needs, leaving
+                  graduates with outdated skills that don't match what employers
+                  actually require.
+                </p>
               </motion.div>
-              <motion.div variants={fadeIn} className="space-y-2">
-                <h3 className="text-4xl font-bold text-blue-600">250+</h3>
-                <p className="text-gray-600">Hiring Partners</p>
+
+              <motion.div variants={fadeIn} className="text-center px-4">
+                <div className="flex justify-center mb-6 text-amber-500">
+                  <Ban size={48} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">
+                  High Entry Barriers
+                </h3>
+                <p className="text-gray-600 text-lg">
+                  Breaking into tech can feel impossible without the right
+                  connections, portfolio, or experience—creating a catch-22 for
+                  newcomers.
+                </p>
               </motion.div>
-              <motion.div variants={fadeIn} className="space-y-2">
-                <h3 className="text-4xl font-bold text-blue-600">5,000+/</h3>
-                <p className="text-gray-600">Graduates</p>
+
+              <motion.div variants={fadeIn} className="text-center px-4">
+                <div className="flex justify-center mb-6 text-blue-500">
+                  <Cpu size={48} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">
+                  Rapid Technology Change
+                </h3>
+                <p className="text-gray-600 text-lg">
+                  The tech landscape evolves so quickly that skills can become
+                  outdated in months, making it hard to know what to learn and
+                  where to start.
+                </p>
               </motion.div>
-              <motion.div variants={fadeIn} className="space-y-2">
-                <h3 className="text-4xl font-bold text-blue-600">£45K</h3>
-                <p className="text-gray-600">Avg. Starting Salary</p>
-              </motion.div>
+            </motion.div>
+
+            <motion.div
+              className="mt-12 text-center"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+            >
+              <Link href="/about">
+                <Button
+                  variant="outline"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-600/10 hover:text-blue-700 mt-6"
+                >
+                  How We Help <ArrowRightIcon className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
             </motion.div>
           </div>
         </section>
