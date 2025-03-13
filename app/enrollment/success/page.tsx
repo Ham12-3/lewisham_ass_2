@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function EnrollmentSuccessPage() {
+// Create a component that uses search params inside Suspense
+function EnrollmentDetails() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [enrollmentDetails, setEnrollmentDetails] = useState<any>(null);
@@ -14,7 +15,10 @@ export default function EnrollmentSuccessPage() {
 
   useEffect(() => {
     async function getEnrollmentDetails() {
-      if (!sessionId) return;
+      if (!sessionId) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const response = await fetch(
@@ -35,6 +39,53 @@ export default function EnrollmentSuccessPage() {
   }, [sessionId]);
 
   return (
+    <>
+      {loading ? (
+        <div className="animate-pulse space-y-3">
+          <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+          <div className="h-4 bg-gray-200 rounded w-full"></div>
+          <div className="h-4 bg-gray-200 rounded w-5/6 mx-auto"></div>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {enrollmentDetails && (
+            <>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Course:</span>{" "}
+                  {enrollmentDetails.courseName}
+                </p>
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Start Date:</span>{" "}
+                  {new Date(enrollmentDetails.startDate).toLocaleDateString()}
+                </p>
+              </div>
+            </>
+          )}
+
+          <p className="text-center text-sm text-gray-600">
+            We've sent a confirmation email with all the course details and next
+            steps.
+          </p>
+        </div>
+      )}
+    </>
+  );
+}
+
+// Fallback component to show while Suspense is loading
+function LoadingFallback() {
+  return (
+    <div className="animate-pulse space-y-3">
+      <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+      <div className="h-4 bg-gray-200 rounded w-full"></div>
+      <div className="h-4 bg-gray-200 rounded w-5/6 mx-auto"></div>
+    </div>
+  );
+}
+
+export default function EnrollmentSuccessPage() {
+  return (
     <div className="container mx-auto px-4 py-16">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-6">
@@ -45,35 +96,9 @@ export default function EnrollmentSuccessPage() {
           </p>
         </div>
 
-        {loading ? (
-          <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
-            <div className="h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6 mx-auto"></div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {enrollmentDetails && (
-              <>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium">Course:</span>{" "}
-                    {enrollmentDetails.courseName}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium">Start Date:</span>{" "}
-                    {new Date(enrollmentDetails.startDate).toLocaleDateString()}
-                  </p>
-                </div>
-              </>
-            )}
-
-            <p className="text-center text-sm text-gray-600">
-              We've sent a confirmation email with all the course details and
-              next steps.
-            </p>
-          </div>
-        )}
+        <Suspense fallback={<LoadingFallback />}>
+          <EnrollmentDetails />
+        </Suspense>
 
         <div className="mt-8 space-y-3">
           <Button asChild className="w-full">
