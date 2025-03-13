@@ -40,14 +40,14 @@ export default function LogoTicker() {
             {logos.map((logo) => (
               <div
                 key={logo.name}
-                className="flex items-center justify-center w-24 h-8"
+                className="flex items-center justify-center w-60 h-32" // Increased from w-40 h-20
               >
                 <Image
                   src={logo.image}
                   alt={logo.name}
-                  className=" object-contain grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
-                  width={1000}
-                  height={1000}
+                  className="w-60 h-32 object-contain grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300" // Increased from w-40 h-20
+                  width={1500}
+                  height={1500} // Increased from 1000x1000
                 />
               </div>
             ))}
