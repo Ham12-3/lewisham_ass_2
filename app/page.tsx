@@ -34,6 +34,7 @@ import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 import LogoTicker from "@/components/logo-ticker";
 import SolutionsBentoGrid from "@/components/solutions-bento-grid";
+import HowItWorksCarousel from "@/components/how-it-works-carousel";
 
 // Animation variants
 const fadeIn = {
@@ -536,6 +537,27 @@ export default function HomePage() {
             </motion.div>
 
             <SolutionsBentoGrid />
+          </div>
+        </section>
+
+        {/* How It Works Section - Auto-Advancing Carousel */}
+        <section className="py-20 bg-white">
+          <div className="container max-w-6xl mx-auto px-4 md:px-6">
+            <motion.div
+              className="text-center mb-16"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+            >
+              <h2 className="text-4xl font-bold mb-4">How It Works</h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Our streamlined process takes you from application to career
+                launch in three simple steps
+              </p>
+            </motion.div>
+
+            <HowItWorksCarousel />
           </div>
         </section>
 
