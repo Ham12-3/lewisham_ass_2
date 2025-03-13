@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CalendarIcon, ClockIcon, UsersIcon, BookOpenIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import EnrollmentForm from "@/components/enrollment-form";
 
 type Course = {
   id: string;
@@ -30,6 +31,7 @@ export default function CourseDetailPage() {
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isEnrollFormOpen, setIsEnrollFormOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -186,7 +188,11 @@ export default function CourseDetailPage() {
                 </div>
               </div>
 
-              <Button className="w-full" disabled={spotsRemaining <= 0}>
+              <Button
+                className="w-full"
+                disabled={spotsRemaining <= 0}
+                onClick={() => setIsEnrollFormOpen(true)}
+              >
                 {spotsRemaining > 0 ? "Enroll Now" : "Class Full"}
               </Button>
 
@@ -199,6 +205,17 @@ export default function CourseDetailPage() {
           </Card>
         </div>
       </div>
+
+      {/* Enrollment Form Modal */}
+      {course && (
+        <EnrollmentForm
+          isOpen={isEnrollFormOpen}
+          onClose={() => setIsEnrollFormOpen(false)}
+          courseId={course.id}
+          courseTitle={course.title}
+          coursePrice={course.price}
+        />
+      )}
     </div>
   );
 }
