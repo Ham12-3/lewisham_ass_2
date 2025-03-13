@@ -33,6 +33,7 @@ import {
 import HeroVideoDialog from "@/components/magicui/hero-video-dialog";
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 import LogoTicker from "@/components/logo-ticker";
+import SolutionsBentoGrid from "@/components/solutions-bento-grid";
 
 // Animation variants
 const fadeIn = {
@@ -514,6 +515,27 @@ export default function HomePage() {
                 </Button>
               </Link>
             </motion.div>
+          </div>
+        </section>
+
+        {/* Solutions Section with Bento Grid */}
+        <section className="bg-gray-50 py-20">
+          <div className="container max-w-6xl mx-auto px-4 md:px-6">
+            <motion.div
+              className="text-center mb-14"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+            >
+              <h2 className="text-4xl font-bold mb-4">Our Solutions</h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                We've designed our bootcamp program to directly address these
+                industry challenges with innovative approaches.
+              </p>
+            </motion.div>
+
+            <SolutionsBentoGrid />
           </div>
         </section>
 
