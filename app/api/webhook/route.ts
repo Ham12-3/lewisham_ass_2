@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import admin, { adminDb } from "@/lib/firebase-admin";
-import { sendEmail, transporter } from "@/lib/email";
+import { sendEmail, transporter, createEnrollmentEmail } from "@/lib/email";
 
 // Define interfaces for our data structures
 interface EnrollmentData {
@@ -123,63 +123,41 @@ async function sendEnrollmentEmail(
     currency: "GBP",
   }).format((paymentDetails.amount_total || 0) / 100);
 
-  // Format course start date
-  const startDate = courseData.startDate
-    ? new Date(courseData.startDate).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
-    : "To be announced";
-
-  const transactionId = paymentDetails.payment_intent || "N/A";
-
-  // Create email content
-  const emailSubject = `Enrollment Confirmation: ${courseData.title}`;
-  const emailContent = `
-    <!-- Your email HTML template here -->
-  `;
+  // Use payment_intent as string or fallback to a generated ID
+  const paymentId =
+    typeof paymentDetails.payment_intent === "string"
+      ? paymentDetails.payment_intent
+      : `manual-${Date.now()}`;
 
   try {
-    // Use the shared email sending function
-    const result = await sendEmail({
-      to: studentEmail,
-      subject: emailSubject,
-      html: emailContent,
+    logger.info(`Sending enrollment email to ${studentEmail}`);
+
+    // Use the new template function
+    const htmlContent = createEnrollmentEmail({
+      studentName: studentName,
+      courseName: courseData.title,
+      courseDate: courseData.startDate,
+      courseLocation: courseData.location,
+      courseDuration: courseData.duration,
+      paymentAmount: formattedAmount,
+      paymentId: paymentId,
+      enrolledAt: enrollmentData.enrolledAt,
     });
 
-    logger.info(
-      `Enrollment confirmation email sent successfully to ${studentEmail}`,
-      {
-        messageId: result.messageId,
-      }
-    );
+    // Send the email
+    const result = await sendEmail({
+      to: studentEmail,
+      subject: `Enrollment Confirmation: ${courseData.title}`,
+      html: htmlContent,
+    });
 
-    // Store successful email log
-    await storeLog("email", {
-      status: "success",
-      recipient: studentEmail,
-      courseId: courseData.id,
-      subject: emailSubject,
+    logger.info(`Email sent successfully to ${studentEmail}`, {
       messageId: result.messageId,
-      timestamp: new Date().toISOString(),
     });
 
     return true;
   } catch (error) {
     logger.error(`Failed to send enrollment email to ${studentEmail}`, error);
-
-    // Store failed email log
-    await storeLog("email", {
-      status: "failed",
-      recipient: studentEmail,
-      courseId: courseData.id,
-      subject: emailSubject,
-      error: error instanceof Error ? error.message : "Unknown error",
-      timestamp: new Date().toISOString(),
-    });
-
     return false;
   }
 }
