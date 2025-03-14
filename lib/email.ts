@@ -1,9 +1,12 @@
 import nodemailer from "nodemailer";
 import { TransportOptions, SentMessageInfo } from "nodemailer";
 
-// Configure email transport with better error handling
+// Update the email transport configuration
 export const transporter = nodemailer.createTransport({
   service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // Use SSL
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
@@ -11,7 +14,6 @@ export const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false, // Helps with some Gmail connection issues
   },
-  debug: process.env.NODE_ENV !== "production", // Enable debug in development
 } as TransportOptions);
 
 // Email verification function
