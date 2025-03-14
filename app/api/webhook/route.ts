@@ -9,16 +9,30 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-// Configure email transport
+// Configure email transport with better error handling
 const transporter = nodemailer.createTransport({
-  service: "gmail", // Use your preferred email service
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
+  tls: {
+    rejectUnauthorized: false, // Helps with some Gmail connection issues
+  },
+  debug: process.env.NODE_ENV !== "production", // Enable debug in development
 });
 
-// Function to send enrollment confirmation email
+// Verify the connection configuration during startup
+(async function verifyTransporter() {
+  try {
+    await transporter.verify();
+    console.log("Email server connection verified");
+  } catch (error) {
+    console.error("Email server connection failed:", error);
+  }
+})();
+
+// Function to send enrollment confirmation email with better error handling
 async function sendEnrollmentEmail(
   enrollmentData: any,
   courseData: any,
@@ -124,17 +138,29 @@ async function sendEnrollmentEmail(
   `;
 
   try {
-    await transporter.sendMail({
-      from: `"Lewisham Adult Learning" <${process.env.EMAIL_USER}>`,
-      to: studentEmail,
-      subject: emailSubject,
-      html: emailContent,
-    });
+    // Add timeout to prevent hanging if email server is slow
+    const info = await Promise.race([
+      transporter.sendMail({
+        from: `"Lewisham Adult Learning" <${process.env.EMAIL_USER}>`,
+        to: studentEmail,
+        subject: emailSubject,
+        html: emailContent,
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Email sending timed out")), 10000)
+      ),
+    ]);
 
     console.log(`Enrollment confirmation email sent to ${studentEmail}`);
     return true;
   } catch (error) {
     console.error("Error sending enrollment email:", error);
+    // Log specific error details for troubleshooting
+    if (error instanceof Error) {
+      console.error("Error name:", error.name);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
     return false;
   }
 }
