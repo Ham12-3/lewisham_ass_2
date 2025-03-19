@@ -39,7 +39,7 @@ type Course = {
   maxStudents: string;
   enrollments: number;
   status: string;
-  createdAt: { toDate: () => Date };
+  createdAt: any; // Changed from { toDate: () => Date } to any
   createdBy: string;
 };
 
@@ -47,7 +47,7 @@ type Student = {
   id: string;
   name: string;
   email: string;
-  enrolledAt: { toDate: () => Date };
+  enrolledAt: any; // Changed from { toDate: () => Date } to any
 };
 
 export default function StaffCourseDetailPage() {
@@ -57,6 +57,37 @@ export default function StaffCourseDetailPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Helper function to safely format dates
+  const formatDate = (timestamp: any): string => {
+    if (!timestamp) return "N/A";
+
+    // Handle Firebase Timestamp
+    if (timestamp && typeof timestamp.toDate === "function") {
+      return timestamp.toDate().toLocaleDateString();
+    }
+
+    // Handle Firebase timestamp that comes as object with seconds and nanoseconds
+    if (timestamp && timestamp.seconds) {
+      return new Date(timestamp.seconds * 1000).toLocaleDateString();
+    }
+
+    // Handle string date
+    if (typeof timestamp === "string") {
+      try {
+        return new Date(timestamp).toLocaleDateString();
+      } catch (e) {
+        return timestamp;
+      }
+    }
+
+    // Handle Date object
+    if (timestamp instanceof Date) {
+      return timestamp.toLocaleDateString();
+    }
+
+    return "Invalid date";
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -77,10 +108,12 @@ export default function StaffCourseDetailPage() {
       const courseDoc = await getDoc(doc(db, "courses", courseId));
 
       if (courseDoc.exists()) {
+        const courseData = courseDoc.data();
         setCourse({
           id: courseDoc.id,
-          ...(courseDoc.data() as Omit<Course, "id">),
-        });
+          ...courseData,
+          enrollments: courseData.enrollments || 0,
+        } as Course);
 
         // Fetch enrolled students
         const enrollmentsQuery = query(
@@ -88,12 +121,15 @@ export default function StaffCourseDetailPage() {
           where("courseId", "==", courseId)
         );
         const enrollmentsSnapshot = await getDocs(enrollmentsQuery);
-        const studentsData: Student[] = [];
 
+        const studentsData: Student[] = [];
         enrollmentsSnapshot.forEach((doc) => {
+          const data = doc.data();
           studentsData.push({
             id: doc.id,
-            ...(doc.data() as Omit<Student, "id">),
+            name: data.studentName || data.name || "Unknown",
+            email: data.studentEmail || data.email || "No email",
+            enrolledAt: data.enrolledAt || data.createdAt || null,
           });
         });
 
@@ -145,10 +181,15 @@ export default function StaffCourseDetailPage() {
     );
   }
 
-  const formattedDate = new Date(course.startDate).toLocaleDateString();
-  const spotsRemaining = parseInt(course.maxStudents) - course.enrollments;
-  const enrollmentPercentage =
-    (course.enrollments / parseInt(course.maxStudents)) * 100;
+  // Safe formatting for course data
+  const formattedStartDate = course.startDate
+    ? formatDate(course.startDate)
+    : "Not set";
+  const spotsRemaining =
+    parseInt(course.maxStudents || "0") - (course.enrollments || 0);
+  const enrollmentPercentage = course.maxStudents
+    ? ((course.enrollments || 0) / parseInt(course.maxStudents)) * 100
+    : 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -161,7 +202,9 @@ export default function StaffCourseDetailPage() {
           </Button>
           <h1 className="text-2xl font-bold">{course.title}</h1>
           <Badge variant={course.status === "active" ? "default" : "secondary"}>
-            {course.status.charAt(0).toUpperCase() + course.status.slice(1)}
+            {course.status
+              ? course.status.charAt(0).toUpperCase() + course.status.slice(1)
+              : "Draft"}
           </Badge>
         </div>
 
@@ -191,6 +234,12 @@ export default function StaffCourseDetailPage() {
                     fill
                     style={{ objectFit: "cover" }}
                     className="rounded-lg"
+                    unoptimized={
+                      !course.imageUrl.includes("res.cloudinary.com") &&
+                      !course.imageUrl.includes(
+                        "startup-template-sage.vercel.app"
+                      )
+                    }
                   />
                 </div>
               )}
@@ -199,24 +248,28 @@ export default function StaffCourseDetailPage() {
                 <div className="flex flex-col items-center p-4 border rounded-lg">
                   <ClockIcon className="h-6 w-6 text-primary mb-2" />
                   <span className="text-sm text-gray-500">Duration</span>
-                  <span className="font-medium">{course.duration} weeks</span>
+                  <span className="font-medium">
+                    {course.duration || "N/A"} weeks
+                  </span>
                 </div>
 
                 <div className="flex flex-col items-center p-4 border rounded-lg">
                   <CalendarIcon className="h-6 w-6 text-primary mb-2" />
                   <span className="text-sm text-gray-500">Start Date</span>
-                  <span className="font-medium">{formattedDate}</span>
+                  <span className="font-medium">{formattedStartDate}</span>
                 </div>
 
                 <div className="flex flex-col items-center p-4 border rounded-lg">
                   <UsersIcon className="h-6 w-6 text-primary mb-2" />
                   <span className="text-sm text-gray-500">Max Students</span>
-                  <span className="font-medium">{course.maxStudents}</span>
+                  <span className="font-medium">
+                    {course.maxStudents || "Unlimited"}
+                  </span>
                 </div>
 
                 <div className="flex flex-col items-center p-4 border rounded-lg">
                   <span className="font-bold text-xl text-primary mb-2">
-                    £{course.price}
+                    £{course.price || "0"}
                   </span>
                   <span className="text-sm text-gray-500">Price</span>
                 </div>
@@ -225,9 +278,13 @@ export default function StaffCourseDetailPage() {
               <div>
                 <h2 className="text-xl font-bold mb-4">Description</h2>
                 <div className="prose prose-sm sm:prose-base max-w-none">
-                  {course.description.split("\n").map((paragraph, idx) => (
-                    <p key={idx}>{paragraph}</p>
-                  ))}
+                  {course.description ? (
+                    course.description
+                      .split("\n")
+                      .map((paragraph, idx) => <p key={idx}>{paragraph}</p>)
+                  ) : (
+                    <p>No description provided.</p>
+                  )}
                 </div>
               </div>
             </TabsContent>
@@ -268,9 +325,7 @@ export default function StaffCourseDetailPage() {
                             <div>{student.email}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div>
-                              {student.enrolledAt.toDate().toLocaleDateString()}
-                            </div>
+                            <div>{formatDate(student.enrolledAt)}</div>
                           </td>
                         </tr>
                       ))}
@@ -296,7 +351,8 @@ export default function StaffCourseDetailPage() {
                 <div>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm font-medium">
-                      {course.enrollments} / {course.maxStudents} spots filled
+                      {course.enrollments || 0} /{" "}
+                      {course.maxStudents || "Unlimited"} spots filled
                     </span>
                     <span className="text-sm font-medium">
                       {enrollmentPercentage.toFixed(0)}%
@@ -312,12 +368,16 @@ export default function StaffCourseDetailPage() {
 
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="border rounded-lg p-4">
-                    <p className="text-2xl font-bold">{course.enrollments}</p>
+                    <p className="text-2xl font-bold">
+                      {course.enrollments || 0}
+                    </p>
                     <p className="text-sm text-gray-500">Students</p>
                   </div>
 
                   <div className="border rounded-lg p-4">
-                    <p className="text-2xl font-bold">{spotsRemaining}</p>
+                    <p className="text-2xl font-bold">
+                      {course.maxStudents ? spotsRemaining : "∞"}
+                    </p>
                     <p className="text-sm text-gray-500">Spots Left</p>
                   </div>
                 </div>
@@ -333,21 +393,25 @@ export default function StaffCourseDetailPage() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Category:</span>
-                  <span className="font-medium">{course.category}</span>
+                  <span className="font-medium">
+                    {course.category || "Uncategorized"}
+                  </span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="text-gray-500">Level:</span>
                   <span className="font-medium">
-                    {course.level.charAt(0).toUpperCase() +
-                      course.level.slice(1)}
+                    {course.level
+                      ? course.level.charAt(0).toUpperCase() +
+                        course.level.slice(1)
+                      : "Not specified"}
                   </span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="text-gray-500">Created:</span>
                   <span className="font-medium">
-                    {course.createdAt?.toDate().toLocaleDateString()}
+                    {formatDate(course.createdAt)}
                   </span>
                 </div>
               </div>
