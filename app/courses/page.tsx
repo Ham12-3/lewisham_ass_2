@@ -136,6 +136,9 @@ export default function CoursesPage() {
         <Link href="/" passHref legacyBehavior>
           <Button asChild variant="outline">
             <a>Home</a>
+            <h1>
+            Hello World
+            </h1>
           </Button>
         </Link>
         <Link href="/enrollment" passHref legacyBehavior>
