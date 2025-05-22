@@ -190,6 +190,24 @@ export default function ManageCoursesPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Navigation Buttons */}
+      <div className="flex gap-2 mb-6">
+        <Link href="/staff/dashboard" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Dashboard</a>
+          </Button>
+        </Link>
+        <Link href="/courses" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Courses</a>
+          </Button>
+        </Link>
+        <Link href="/" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Home</a>
+          </Button>
+        </Link>
+      </div>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <h1 className="text-2xl font-bold">Course Management</h1>
         <div className="flex flex-col sm:flex-row gap-4">
