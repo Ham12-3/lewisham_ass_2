@@ -30,6 +30,34 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
+          <nav
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1.5rem",
+              padding: "1rem 2rem",
+              borderBottom: "1px solid #e5e7eb",
+              background: "#fff",
+              position: "relative",
+              zIndex: 10,
+            }}
+          >
+            <span style={{ fontWeight: 600, fontSize: "1.1rem", marginRight: "2rem" }}>
+              MyApp
+            </span>
+            <Link href="/" style={{ textDecoration: "none", color: "#222" }}>
+              Home
+            </Link>
+            <Link href="/courses" style={{ textDecoration: "none", color: "#222" }}>
+              Courses
+            </Link>
+            <Link href="/enrollment" style={{ textDecoration: "none", color: "#222" }}>
+              Enrollment
+            </Link>
+            <Link href="/staff/dashboard" style={{ textDecoration: "none", color: "#222" }}>
+              Staff Dashboard
+            </Link>
+          </nav>
           {children}
           <Toaster />
         </AuthProvider>
