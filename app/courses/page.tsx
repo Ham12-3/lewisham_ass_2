@@ -131,6 +131,19 @@ export default function CoursesPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Navigation Buttons */}
+      <div className="flex gap-2 mb-6">
+        <Link href="/" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Home</a>
+          </Button>
+        </Link>
+        <Link href="/enrollment" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Enrollment</a>
+          </Button>
+        </Link>
+      </div>
       <h1 className="text-3xl font-bold mb-8 text-center">Available Courses</h1>
 
       {/* Filters and Search */}
