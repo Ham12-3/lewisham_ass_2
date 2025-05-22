@@ -78,6 +78,24 @@ export default function StaffDashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Navigation Buttons */}
+      <div className="flex gap-2 mb-6">
+        <Link href="/staff/manage" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Manage Courses</a>
+          </Button>
+        </Link>
+        <Link href="/courses" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Courses</a>
+          </Button>
+        </Link>
+        <Link href="/" passHref legacyBehavior>
+          <Button asChild variant="outline">
+            <a>Home</a>
+          </Button>
+        </Link>
+      </div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Staff Dashboard</h1>
         <Button onClick={() => auth.signOut()}>Sign Out</Button>
